@@ -24,27 +24,10 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-
-bot.dialog('/', [
-    function (session, args, next) {
-        //session.userData.name = undefined;
-        if (!session.userData.name) {
-            session.beginDialog('/profile');
-        } else {
-            next();
-        }
-    },
-    function (session, results) {
-        session.send('Salut %s!', session.userData.name);
-    }
-]);
-
-bot.dialog('/profile', [
-    function (session) {
-        builder.Prompts.text(session, 'Bonjour ! Quel est ton nom ?');
-    },
-    function (session, results) {
-        session.userData.name = results.response;
-        session.endDialog();
-    }
-]);
+bot.dialog('/', new builder.IntentDialog()
+    .matches(/(manger|loger)/i, function (session) {
+        session.send("Hi there!");
+    })
+    .onDefault(function (session) {
+        session.send("I didn't understand.");
+    }));
