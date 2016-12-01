@@ -24,10 +24,17 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
+var pasTrouve = [
+    "Je n'ai pas compris... :(",
+    "Je n'ai pas pu comprendre votre demande... Pouvez-vous la reformuler ?",
+    "Je n'ai pas saisir votre demande... Serait-il possible que vous la formulez d'une autre manière ?"
+];
+
 bot.dialog('/', new builder.IntentDialog()
     .matches(/(manger|loger)/i, function (session) {
-        session.send("Hi there!");
+        session.send("ça marche");
     })
     .onDefault(function (session) {
-        session.send("I didn't understand.");
-    }));
+        session.send(pasTrouve[Math.floor(Math.random()*pasTrouve.length)]);
+    })
+);
