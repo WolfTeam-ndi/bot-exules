@@ -3,9 +3,10 @@ var builder = require('botbuilder');
 var nominatim = require('nominatim-client');
 
 // test
+
+
 var query = {
-    q: 'Strasbourg',
-    addressdetails: '1'
+    q: 'Strasbourg'
 };
 
 nominatim.search(query, function(err, data) {
@@ -13,7 +14,7 @@ nominatim.search(query, function(err, data) {
         throw err;
     }
     
-    console.log(data);
+    //console.log(data);
 });
 
 
