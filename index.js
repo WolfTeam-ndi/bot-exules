@@ -24,19 +24,18 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-<<<<<<< HEAD
+
 var nourriture=/(manger|nourriture|nourrir|faim)/i;
 var loger=/(loger|logement|logements|a la rue|maison|appartement|foyer)/i;
 var aide=/(besoin|aide|)/i;
-=======
->>>>>>> ea8cd5622dceadf485d0dcfae2f5cee44c52ac70
+
+
 var pasTrouve = [
     "Je n'ai pas compris... :(",
     "Je n'ai pas pu comprendre votre demande... Pouvez-vous la reformuler ?",
     "Je n'ai pas saisir votre demande... Serait-il possible que vous la formulez d'une autre manière ?"
 ];
 
-<<<<<<< HEAD
 /*bot.dialog('/NomDemande', [
     function (session) {
         builder.Prompts.text(session, 'Bonjour, quel est votre nom ?');
@@ -113,13 +112,3 @@ bot.dialog('/Dialogue', [
         session.endDialogWithResult({ response: session.dialogData.profile });
     }
 ]);
-=======
-bot.dialog('/', new builder.IntentDialog()
-    .matches(/(manger|loger)/i, function (session) {
-        session.send("ça marche");
-    })
-    .onDefault(function (session) {
-        session.send(pasTrouve[Math.floor(Math.random()*pasTrouve.length)]);
-    })
-);
->>>>>>> ea8cd5622dceadf485d0dcfae2f5cee44c52ac70
