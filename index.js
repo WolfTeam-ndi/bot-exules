@@ -1,5 +1,21 @@
 var restify = require('restify');
 var builder = require('botbuilder');
+var nominatim = require('nominatim-client');
+
+// test
+var query = {
+    q: 'Strasbourg',
+    addressdetails: '1'
+};
+
+nominatim.search(query, function(err, data) {
+    if (err) {
+        throw err;
+    }
+    
+    console.log(data);
+});
+
 
 var data = require('./db.json');
 

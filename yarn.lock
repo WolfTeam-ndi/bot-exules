@@ -610,6 +610,10 @@ node-uuid@^1.4.1, node-uuid@^1.4.7:
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/node-uuid/-/node-uuid-1.4.7.tgz#6da5a17668c4b3dd59623bda11cf7fa4c1f60a6f"
 
+nominatim-client:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/nominatim-client/-/nominatim-client-1.0.1.tgz#5e55c54716c1430c63be5ccef9c1cce671e14e0b"
+
 number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
