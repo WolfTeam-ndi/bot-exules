@@ -1,6 +1,8 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 
+var data = require('./db.json');
+
 
 //=========================================================
 // Bot Setup
@@ -31,41 +33,11 @@ var aide=/(besoin|aide|)/i;
 
 
 var pasTrouve = [
-    "Je n'ai pas compris... :(",
-    "Je n'ai pas pu comprendre votre demande... Pouvez-vous la reformuler ?",
-    "Je n'ai pas saisir votre demande... Serait-il possible que vous la formulez d'une autre manière ?"
+    "je n'ai pas compris... :(",
+    "je n'ai pas pu comprendre votre demande... Pouvez-vous la reformuler ?",
+    "je n'ai pas saisir votre demande... Serait-il possible que vous la formulez d'une autre manière ?"
 ];
 
-/*bot.dialog('/NomDemande', [
-    function (session) {
-        builder.Prompts.text(session, 'Bonjour, quel est votre nom ?');
-    },
-
-    function (session, results) {
-        session.endDialogWithResult(results);
-    }
-]);
-
-bot.dialog('/', [
-    function (session) {
-        session.beginDialog('/NomDemande');
-    },
-
-    function (session, results) {
-        session.send('Bonjour %s, que puis-je faire pour vous ?', results.response);
-    }
-]);
-
-bot.dialog('/Reponse2', new builder.IntentDialog()
-    .matches(nourriture, function (session) {
-        session.send("Je vais vous fournir la liste des restos du coeur qui sont près de vous !");
-    })
-    .matches(loger, function(session){
-        session.send("Je vais vous mettre à disposition une liste d'endroits où vous pouvez loger en fonction de votre position");
-    })
-    .onDefault(function (session) {
-        session.send(pasTrouve);
-    }));*/
 
 bot.dialog('/', [
     function (session) {
@@ -73,8 +45,12 @@ bot.dialog('/', [
     },
     function (session, results) {
         session.userData.profile = results.response;
-        session.send('Bonjour %(name)s ! ', session.userData.profile);
-        session.userData=undefined;
+        if(session.userData.profile.demande) {
+            session.send("%(name)s, voici ce que j'ai trouvé pour vous : %(demande)s", session.userData.profile);
+        } else {
+            session.send("%(name)s" + pasTrouve[Math.floor(Math.random()*pasTrouve.length)], session.userData.profile);
+            session.beginDialog('/Dialogue', session.userData.profile);
+        }
     }
 ]);
 bot.dialog('/Dialogue', [
@@ -90,26 +66,47 @@ bot.dialog('/Dialogue', [
         if (results.response) {
             session.dialogData.profile.name = results.response;
         }
-        if (!session.dialogData.profile.demande) {
-            builder.Prompts.text(session, "En quoi puis-je vous aider ? ");
+        if(!session.dialogData.profile.place) {
+            builder.Prompts.text(session, "Dans quelle ville êtes-vous ?");
         } else {
             next();
         }
     },
+    function (session, results, next) {
+        if (results.response) {
+            session.dialogData.profile.place = results.response;
+        }
+        builder.Prompts.text(session, "En quoi puis-je vous aider ? ");
+    },
     function (session, results) {
         if (results.response) {
-            console.log("on arrive bien là OKOK");
-            console.log(results.response);
+            session.dialogData.profile.demande = results.response;
+
+            // Si il souhaite reset les infos du bot (le nom enregistré)
+            if(results.response == '/reset') {
+                session.userData.profile=undefined;
+                session.beginDialog('/Dialogue', session.userData.profile);
+            }
+
+            // Si il souhaite manger
             if(results.response.match(nourriture)) {
-                session.send('Je pense que tu souhaites manger !', session.userData.profile);
+                var resto = data[Math.floor(Math.random()*data.length)];
+                session.dialogData.profile.demande = "\n\n Je peux vous conseiller un Resto du Coeur qui pourra vous aider !  ";
+                session.dialogData.profile.demande += "\n\n Rendez-vous au " + resto.nom;
+                session.dialogData.profile.demande += "\n\n      " + resto.adresse;
             }
+
+            // S'il souhaite se loger
             else if(results.response.match(loger)) {
-                session.send('Je pense que tu souhaites te loger !', session.userData.profile);
+                session.dialogData.profile.demande = "Je vous conseille d'appeler le 115, ils pourront vous aider rapidement !";
             }
+
+            // Si on a pas compris..
             else {
-                session.send(pasTrouve[Math.floor(Math.rand()*pasTrouve.length)], session.userData.profile);
+                session.dialogData.profile.demande = false;
             }
         }
+        
         session.endDialogWithResult({ response: session.dialogData.profile });
     }
 ]);
