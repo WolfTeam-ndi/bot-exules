@@ -73,7 +73,7 @@ bot.dialog('/', [
     },
     function (session, results) {
         session.userData.profile = results.response;
-        session.send('Bonjour %(name)s ! %(demande)s ', session.userData.profile);
+        session.send('Bonjour %(name)s ! ', session.userData.profile);
         session.userData=undefined;
     }
 ]);
@@ -98,16 +98,17 @@ bot.dialog('/Dialogue', [
     },
     function (session, results) {
         if (results.response) {
-        new builder.IntentDialog()
-        .matches(nourriture, function (session) {
-        session.dialogData.profile.demande="Je vais vous fournir la liste des restos du coeur qui sont près de vous";
-        })
-        .matches(loger, function(session){
-        session.dialogData.profile.demande="Je vais vous mettre à disposition une liste d'endroits où vous pouvez loger en fonction de votre position";
-        })
-        .onDefault(function (session) {
-        session.dialogData.profile.demande=pasTrouve;
-        });
+            console.log("on arrive bien là OKOK");
+            console.log(results.response);
+            if(results.response.match(nourriture)) {
+                session.send('Je pense que tu souhaites manger !', session.userData.profile);
+            }
+            else if(results.response.match(loger)) {
+                session.send('Je pense que tu souhaites te loger !', session.userData.profile);
+            }
+            else {
+                session.send(pasTrouve[Math.floor(Math.rand()*pasTrouve.length)], session.userData.profile);
+            }
         }
         session.endDialogWithResult({ response: session.dialogData.profile });
     }
