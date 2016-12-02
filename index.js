@@ -91,9 +91,30 @@ bot.dialog('/Dialogue', [
     },
     function (session, results, next) {
         if (results.response) {
+            var query = {
+                q: results.response
+            };
+
+            nominatim.search(query, function(err, data) {
+                if(!err) {
+
+                    // La ville existe, on peut passer à la suite
+                    if(data.length > 0) {
+                        builder.Prompts.text(session, "En quoi puis-je vous aider ? ");
+                    }
+                    
+                    // La ville n'existe pas
+                    else {
+                        session.beginDialog('/Dialogue', session.userData.profile);
+                    }
+                    
+                }
+
+            });
             session.dialogData.profile.place = results.response;
+        } else {
+            builder.Prompts.text(session, "En quoi puis-je vous aider ? ");
         }
-        builder.Prompts.text(session, "En quoi puis-je vous aider ? ");
     },
     function (session, results) {
         if (results.response) {
