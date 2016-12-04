@@ -1,0 +1,46 @@
+{
+    "nourriture": [{
+        "nom" : "reto",
+        "adresse": {
+            "numero": 42,
+            "rue": "rue de Test",
+            "ville": "Strasbourg",
+            "code": 67000   
+        },
+        "lat": 42,
+        "lon": 42
+    },
+    {
+        "nom" : "",
+        "adresse": {
+            "numero": 43,
+            "rue": "rue de Test",
+            "ville": "Strasbourg",
+            "code": 67000   
+        },
+        "lat": 43,
+        "lon": 43
+    }],
+    "hebergement": [{
+        "nom" : "",
+        "adresse": {
+            "numero": 42,
+            "rue": "rue de Test",
+            "ville": "Strasbourg",
+            "code": 67000   
+        },
+        "lat": 42,
+        "lon": 42
+    },
+    {
+        "nom" : "",
+        "adresse": {
+            "numero": 43,
+            "rue": "rue de Test",
+            "ville": "Strasbourg",
+            "code": 67000   
+        },
+        "lat": 43,
+        "lon": 43
+    }]
+}
